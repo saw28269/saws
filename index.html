@@ -79,20 +79,35 @@
 <body>
 
 <div class="start-overlay" id="startOverlay">Tap Anywhere to Begin</div>
-
 <div class="intro-text" id="introText">
   <p>You're loved</p>
   <div class="support">We Support You Always</div>
 </div>
-
 <div class="slideshow-container" id="slideshow">
-  <!-- Replace with your own image filenames in /images/ folder -->
-  ${[...Array(21)].map((_, i) => `<div class="slide"><img src="images/img${i+1}.jpg" /></div>`).join('')}
+  <div class="slide"><img src="images/img1.jpg" /></div>
+  <div class="slide"><img src="images/img2.jpg" /></div>
+  <div class="slide"><img src="images/img3.jpg" /></div>
+  <div class="slide"><img src="images/img4.jpg" /></div>
+  <div class="slide"><img src="images/img5.jpg" /></div>
+  <div class="slide"><img src="images/img6.jpg" /></div>
+  <div class="slide"><img src="images/img7.jpg" /></div>
+  <div class="slide"><img src="images/img8.jpg" /></div>
+  <div class="slide"><img src="images/img9.jpg" /></div>
+  <div class="slide"><img src="images/img10.jpg" /></div>
+  <div class="slide"><img src="images/img11.jpg" /></div>
+  <div class="slide"><img src="images/img12.jpg" /></div>
+  <div class="slide"><img src="images/img13.jpg" /></div>
+  <div class="slide"><img src="images/img14.jpg" /></div>
+  <div class="slide"><img src="images/img15.jpg" /></div>
+  <div class="slide"><img src="images/img16.jpg" /></div>
+  <div class="slide"><img src="images/img17.jpg" /></div>
+  <div class="slide"><img src="images/img18.jpg" /></div>
+  <div class="slide"><img src="images/img19.jpg" /></div>
+  <div class="slide"><img src="images/img20.jpg" /></div>
+  <div class="slide"><img src="images/img21.jpg" /></div>
 </div>
-
 <div class="final-message" id="finalMessage">We support you always. We Love you.</div>
 
-<!-- ✅ Audio -->
 <audio id="introAudio" src="intro.mp3" preload="auto" playsinline></audio>
 <audio id="videoBackAudio" src="video_back.mp3" preload="auto" playsinline></audio>
 <audio id="instrumentalAudio" src="instrumental.mp3" preload="auto" playsinline></audio>
@@ -104,7 +119,6 @@
   const introText = document.getElementById("introText");
   const overlay = document.getElementById("startOverlay");
   const finalMessage = document.getElementById("finalMessage");
-
   const introAudio = document.getElementById("introAudio");
   const videoBackAudio = document.getElementById("videoBackAudio");
   const instrumentalAudio = document.getElementById("instrumentalAudio");
@@ -123,15 +137,11 @@
   function startSlides() {
     slideshow.style.display = "block";
     showSlide(current);
-
     const interval = setInterval(() => {
       current++;
-
       if (current === slides.length - 1) {
         clearInterval(interval);
         showSlide(current);
-
-        // Fade out instrumental in the last 5 seconds
         setTimeout(() => {
           const fadeOut = setInterval(() => {
             if (instrumentalAudio.volume > 0.05) {
@@ -142,19 +152,17 @@
             }
           }, 250);
         }, lastSlideDuration - 5000);
-
         setTimeout(() => {
           document.body.style.background = "black";
           setTimeout(() => {
             outroAudio.play().catch(() => {});
-          }, 1000); // 1–2 sec silence
+          }, 1000);
           setTimeout(() => {
             finalMessage.style.display = "block";
-          }, 3000); // 2 sec after outro starts
+          }, 3000);
         }, lastSlideDuration);
         return;
       }
-
       showSlide(current);
     }, slideDuration);
   }
@@ -162,13 +170,10 @@
   function startExperience() {
     overlay.style.display = "none";
     introText.style.display = "flex";
-
     introAudio.play().catch(() => {});
-
     setTimeout(() => {
       introText.style.display = "none";
       videoBackAudio.play().catch(() => {});
-
       videoBackAudio.onended = () => {
         instrumentalAudio.volume = 1;
         instrumentalAudio.play().catch(() => {});
@@ -180,6 +185,5 @@
   overlay.addEventListener("click", startExperience);
   overlay.addEventListener("touchstart", startExperience);
 </script>
-
 </body>
 </html>
