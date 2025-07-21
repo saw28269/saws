@@ -142,6 +142,7 @@
       if (current === slides.length - 1) {
         clearInterval(interval);
         showSlide(current);
+
         setTimeout(() => {
           const fadeOut = setInterval(() => {
             if (instrumentalAudio.volume > 0.05) {
@@ -152,14 +153,15 @@
             }
           }, 250);
         }, lastSlideDuration - 5000);
+
         setTimeout(() => {
           document.body.style.background = "black";
           setTimeout(() => {
             outroAudio.play().catch(() => {});
-          }, 1000);
+          }, 2000);
           setTimeout(() => {
             finalMessage.style.display = "block";
-          }, 3000);
+          }, 4000);
         }, lastSlideDuration);
         return;
       }
@@ -185,5 +187,6 @@
   overlay.addEventListener("click", startExperience);
   overlay.addEventListener("touchstart", startExperience);
 </script>
+
 </body>
 </html>
