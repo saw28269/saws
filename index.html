@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Kayla Tribute</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: 'Arial', sans-serif;
@@ -16,7 +13,6 @@
       color: white;
       overflow: hidden;
     }
-
     .start-overlay {
       position: fixed;
       top: 0; left: 0;
@@ -29,7 +25,6 @@
       font-size: 1.8em;
       cursor: pointer;
     }
-
     .intro-text {
       position: fixed;
       top: 0; left: 0;
@@ -42,17 +37,14 @@
       z-index: 10;
       text-align: center;
     }
-
     .intro-text p {
       font-size: 2em;
       margin: 0;
     }
-
     .intro-text .support {
       font-size: 1.2em;
       margin-top: 10px;
     }
-
     .slideshow-container {
       display: none;
       width: 100vw;
@@ -60,20 +52,17 @@
       background: black;
       position: relative;
     }
-
     .slide {
       display: none;
       width: 100%;
       height: 100%;
     }
-
     .slide img {
       width: 100%;
       height: 100%;
       object-fit: contain;
       background: black;
     }
-
     .final-message {
       display: none;
       color: white;
@@ -89,17 +78,15 @@
 </head>
 <body>
 
-<!-- Tap to Start -->
 <div class="start-overlay" id="startOverlay">Tap Anywhere to Begin</div>
 
-<!-- Intro Screen -->
 <div class="intro-text" id="introText">
   <p>You're loved</p>
   <div class="support">We Support You Always</div>
 </div>
 
-<!-- Slideshow -->
 <div class="slideshow-container" id="slideshow">
+  <!-- 21 images -->
   <div class="slide"><img src="images/img1.jpg" /></div>
   <div class="slide"><img src="images/img2.jpg" /></div>
   <div class="slide"><img src="images/img3.jpg" /></div>
@@ -123,21 +110,18 @@
   <div class="slide"><img src="images/img21.jpg" /></div>
 </div>
 
-<!-- Outro Message -->
 <div class="final-message" id="finalMessage">We support you always. We Love you.</div>
 
-<!-- Audio -->
-<audio id="bgMusic" src="audio/video_back.mp3" preload="auto" playsinline></audio>
-<audio id="introAudio" src="audio/intro.mp3" preload="auto" playsinline></audio>
-<audio id="instrumentalMusic" src="audio/instrumental.mp3" preload="auto" playsinline></audio>
-<audio id="outroAudio" src="audio/outro.mp3" preload="auto" playsinline></audio>
+<!-- Audio (no bgMusic) -->
+<audio id="introAudio" src="intro.mp3" preload="auto" playsinline></audio>
+<audio id="instrumentalMusic" src="instrumental.mp3" preload="auto" playsinline></audio>
+<audio id="outroAudio" src="outro.mp3" preload="auto" playsinline></audio>
 
 <script>
   const slides = document.querySelectorAll(".slide");
   const slideshow = document.getElementById("slideshow");
   const introText = document.getElementById("introText");
   const overlay = document.getElementById("startOverlay");
-  const music = document.getElementById("bgMusic");
   const introAudio = document.getElementById("introAudio");
   const instrumentalAudio = document.getElementById("instrumentalMusic");
   const outroAudio = document.getElementById("outroAudio");
@@ -157,10 +141,8 @@
     slideshow.style.display = "block";
     showSlide(current);
 
-    // Play instrumental music after intro
-    setTimeout(() => {
-      instrumentalAudio.play().catch(() => {});
-    }, 3000);
+    // Start instrumental
+    instrumentalAudio.play().catch(() => {});
 
     const interval = setInterval(() => {
       current++;
@@ -169,6 +151,7 @@
         clearInterval(interval);
         showSlide(current);
 
+        // Fade last slide out after 8s
         setTimeout(() => {
           slides[current].style.opacity = 1;
           const fadeSlide = setInterval(() => {
@@ -180,6 +163,13 @@
           }, 200);
         }, 8000);
 
+        // Stop instrumental 1s before outro
+        setTimeout(() => {
+          instrumentalAudio.pause();
+          instrumentalAudio.currentTime = 0;
+        }, lastSlideDuration - 1000);
+
+        // Wait 1s, then play outro + message
         setTimeout(() => {
           document.body.style.background = "black";
           setTimeout(() => { outroAudio.play().catch(() => {}); }, 1000);
@@ -187,6 +177,7 @@
             finalMessage.style.display = "block";
           }, 2000);
         }, lastSlideDuration);
+
         return;
       }
 
@@ -202,11 +193,6 @@
 
     setTimeout(() => {
       introText.style.display = "none";
-
-      music.play().catch(() => {
-        alert("Please tap again to enable music playback.");
-      });
-
       startSlides();
     }, 7000);
   }
@@ -217,3 +203,4 @@
 
 </body>
 </html>
+
