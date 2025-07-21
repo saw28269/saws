@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kayla Tribute</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: black;
+      color: white;
+      overflow: hidden;
+    }
+
+    .start-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: black;
+      z-index: 99;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8em;
+      cursor: pointer;
+    }
+
+    .intro-text {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: black;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 10;
+      text-align: center;
+    }
+
+    .intro-text p {
+      font-size: 2em;
+      margin: 0;
+    }
+
+    .intro-text .support {
+      font-size: 1.2em;
+      margin-top: 10px;
+    }
+
+    .slideshow-container {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+      position: relative;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: black;
+    }
+
+    .final-message {
+      display: none;
+      color: white;
+      font-size: 1.8em;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 20;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Tap to Start -->
+<div class="start-overlay" id="startOverlay">Tap Anywhere to Begin</div>
+
+<!-- Intro Screen -->
+<div class="intro-text" id="introText">
+  <p>You're loved</p>
+  <div class="support">We Support You Always</div>
+</div>
+
+<!-- Slideshow -->
+<div class="slideshow-container" id="slideshow">
+  <!-- Replace with your own images -->
+  <div class="slide"><img src="img1.jpg" /></div>
+  <div class="slide"><img src="img2.jpg" /></div>
+  <div class="slide"><img src="img3.jpg" /></div>
+  <div class="slide"><img src="img4.jpg" /></div>
+  <div class="slide"><img src="img5.jpg" /></div>
+  <div class="slide"><img src="img6.jpg" /></div>
+  <div class="slide"><img src="img7.jpg" /></div>
+  <div class="slide"><img src="img8.jpg" /></div>
+  <div class="slide"><img src="img9.jpg" /></div>
+  <div class="slide"><img src="img10.jpg" /></div>
+  <div class="slide"><img src="img11.jpg" /></div>
+  <div class="slide"><img src="img12.jpg" /></div>
+  <div class="slide"><img src="img13.jpg" /></div>
+  <div class="slide"><img src="img14.jpg" /></div>
+  <div class="slide"><img src="img15.jpg" /></div>
+  <div class="slide"><img src="img16.jpg" /></div>
+  <div class="slide"><img src="img17.jpg" /></div>
+  <div class="slide"><img src="img18.jpg" /></div>
+  <div class="slide"><img src="img19.jpg" /></div>
+  <div class="slide"><img src="img20.jpg" /></div>
+  <div class="slide"><img src="img21.jpg" /></div>
+</div>
+
+<!-- Outro Message -->
+<div class="final-message" id="finalMessage">We support you always. We Love you.</div>
+
+<!-- Audio -->
+<audio id="bgMusic" src="video_back.mp3" preload="auto" playsinline></audio>
+<audio id="introAudio" src="intro.mp3" preload="auto" playsinline></audio>
+<audio id="instrumentalMusic" src="instrumental.mp3" preload="auto" playsinline></audio>
+<audio id="outroAudio" src="outro.mp3" preload="auto" playsinline></audio>
+
+<script>
+  const slides = document.querySelectorAll(".slide");
+  const slideshow = document.getElementById("slideshow");
+  const introText = document.getElementById("introText");
+  const overlay = document.getElementById("startOverlay");
+  const music = document.getElementById("bgMusic");
+  const introAudio = document.getElementById("introAudio");
+  const outroAudio = document.getElementById("outroAudio");
+  const finalMessage = document.getElementById("finalMessage");
+
+  const slideDuration = 6500;
+  const lastSlideDuration = 10000;
+  let current = 0;
+
+  function showSlide(i) {
+    slides.forEach((slide, index) => {
+      slide.style.display = index === i ? "block" : "none";
+    });
+  }
+
+  function startSlides() {
+    slideshow.style.display = "block";
+    showSlide(current);
+
+    const interval = setInterval(() => {
+      current++;
+
+      if (current === slides.length - 1) {
+        clearInterval(interval);
+        showSlide(current);
+
+        setTimeout(() => {
+          slides[current].style.opacity = 1;
+          const fadeSlide = setInterval(() => {
+            slides[current].style.opacity -= 0.05;
+            if (slides[current].style.opacity <= 0) {
+              slides[current].style.display = "none";
+              clearInterval(fadeSlide);
+            }
+          }, 200);
+        }, 8000);
+
+        setTimeout(() => {
+          document.body.style.background = "black";
+          setTimeout(() => { document.getElementById('outroAudio').play().catch(() => {}); }, 1000);
+          setTimeout(() => {
+            finalMessage.style.display = "block";
+          }, 2000);
+        }, lastSlideDuration);
+        return;
+      }
+
+      showSlide(current);
+    }, slideDuration);
+  }
+
+  function startExperience() {
+    overlay.style.display = "none";
+    introText.style.display = "flex";
+
+    // Safely play intro audio
+    introAudio.play().catch(() => {});
+
+    setTimeout(() => {
+      introText.style.display = "none";
+
+      // Play background music after intro
+      music.play().catch(() => {
+        alert("Please tap again to enable music playback.");
+      });
+
+      startSlides();
+    }, 7000);
+  }
+
+  // Trigger everything after first user interaction
+  overlay.addEventListener("click", startExperience);
+  overlay.addEventListener("touchstart", startExperience);
+</script>
+
+</body>
+</html>
