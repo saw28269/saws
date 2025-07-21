@@ -6,106 +6,86 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
     * { box-sizing: border-box; }
-    body { margin: 0; font-family: Arial, sans-serif; background: black; color: white; overflow: hidden; }
+    body { margin: 0; background: black; color: white; font-family: Arial, sans-serif; overflow: hidden; }
     .start-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: black; z-index: 99; display: flex; align-items: center; justify-content: center; font-size: 1.8em; cursor: pointer; }
-    .intro-text { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: black; display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 10; text-align: center; }
-    .intro-text p { font-size: 2em; margin: 0; }
-    .intro-text .support { font-size: 1.2em; margin-top: 10px; }
-    .slideshow-container { display: none; width: 100vw; height: 100vh; background: black; position: relative; }
+    .slideshow-container { display: none; width: 100vw; height: 100vh; position: relative; }
     .slide { display: none; width: 100%; height: 100%; }
     .slide img { width: 100%; height: 100%; object-fit: contain; }
-    .final-message { display: none; color: white; font-size: 1.8em; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 20; text-align: center; }
+    .final-message { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.8em; text-align: center; }
+    /* show audio control once unmuted */
+    #fullAudio { position: fixed; bottom: 10px; right: 10px; display: none; }
+    #fullAudio.show { display: block; }
   </style>
 </head>
 <body>
+  <div class="start-overlay" id="startOverlay">Tap Anywhere to Begin</div>
+  <div class="slideshow-container" id="slideshow">
+    <div class="slide"><img src="images/img1.jpg" /></div>
+    <div class="slide"><img src="images/img2.jpg" /></div>
+    <div class="slide"><img src="images/img3.jpg" /></div>
+    <div class="slide"><img src="images/img4.jpg" /></div>
+    <div class="slide"><img src="images/img5.jpg" /></div>
+    <div class="slide"><img src="images/img6.jpg" /></div>
+    <div class="slide"><img src="images/img7.jpg" /></div>
+    <div class="slide"><img src="images/img8.jpg" /></div>
+    <div class="slide"><img src="images/img9.jpg" /></div>
+    <div class="slide"><img src="images/img10.jpg" /></div>
+    <div class="slide"><img src="images/img11.jpg" /></div>
+    <div class="slide"><img src="images/img12.jpg" /></div>
+    <div class="slide"><img src="images/img13.jpg" /></div>
+    <div class="slide"><img src="images/img14.jpg" /></div>
+    <div class="slide"><img src="images/img15.jpg" /></div>
+    <div class="slide"><img src="images/img16.jpg" /></div>
+    <div class="slide"><img src="images/img17.jpg" /></div>
+    <div class="slide"><img src="images/img18.jpg" /></div>
+    <div class="slide"><img src="images/img19.jpg" /></div>
+    <div class="slide"><img src="images/img20.jpg" /></div>
+    <div class="slide"><img src="images/img21.jpg" /></div>
+    <div class="slide"><img src="images/img22.jpg" /></div>
+  </div>
+  <div class="final-message" id="finalMessage">We support you always. We Love you.</div>
 
-<div class="start-overlay" id="startOverlay">Tap Anywhere to Begin</div>
-<div class="intro-text" id="introText">
-  <p>You're loved</p>
-  <div class="support">We Support You Always</div>
-</div>
+  <!-- autoplay muted to satisfy iOS, controls to verify load -->
+  <audio id="fullAudio" src="final_audio_corrected.mp3" preload="auto" autoplay muted playsinline controls></audio>
 
-<div class="slideshow-container" id="slideshow">
-  <div class="slide"><img src="images/img1.jpg" /></div>
-  <div class="slide"><img src="images/img2.jpg" /></div>
-  <div class="slide"><img src="images/img3.jpg" /></div>
-  <div class="slide"><img src="images/img4.jpg" /></div>
-  <div class="slide"><img src="images/img5.jpg" /></div>
-  <div class="slide"><img src="images/img6.jpg" /></div>
-  <div class="slide"><img src="images/img7.jpg" /></div>
-  <div class="slide"><img src="images/img8.jpg" /></div>
-  <div class="slide"><img src="images/img9.jpg" /></div>
-  <div class="slide"><img src="images/img10.jpg" /></div>
-  <div class="slide"><img src="images/img11.jpg" /></div>
-  <div class="slide"><img src="images/img12.jpg" /></div>
-  <div class="slide"><img src="images/img13.jpg" /></div>
-  <div class="slide"><img src="images/img14.jpg" /></div>
-  <div class="slide"><img src="images/img15.jpg" /></div>
-  <div class="slide"><img src="images/img16.jpg" /></div>
-  <div class="slide"><img src="images/img17.jpg" /></div>
-  <div class="slide"><img src="images/img18.jpg" /></div>
-  <div class="slide"><img src="images/img19.jpg" /></div>
-  <div class="slide"><img src="images/img20.jpg" /></div>
-  <div class="slide"><img src="images/img21.jpg" /></div>
-  <div class="slide"><img src="images/img22.jpg" /></div>
-</div>
+  <script>
+    const overlay = document.getElementById('startOverlay');
+    const slideshow = document.getElementById('slideshow');
+    const slides = document.querySelectorAll('.slide');
+    const finalMsg = document.getElementById('finalMessage');
+    const audio = document.getElementById('fullAudio');
+    let current = 0;
+    const slideDuration = 6500;
+    const lastDelay = 2000;
 
-<div class="final-message" id="finalMessage">We support you always. We Love you.</div>
+    function showSlide(i) {
+      slides.forEach((s, idx) => s.style.display = idx === i ? 'block' : 'none');
+    }
 
-<!-- Single Combined Audio -->
-<audio id="fullAudio" src="final_audio_corrected.mp3" preload="auto" playsinline></audio>
-
-<script>
-  const slides = document.querySelectorAll(".slide");
-  const slideshow = document.getElementById("slideshow");
-  const overlay = document.getElementById("startOverlay");
-  const introText = document.getElementById("introText");
-  const finalMessage = document.getElementById("finalMessage");
-  const fullAudio = document.getElementById("fullAudio");
-
-  const slideDuration = 6500;
-  let current = 0;
-
-  function showSlide(i) {
-    slides.forEach((slide, idx) => {
-      slide.style.display = idx === i ? "block" : "none";
-    });
-  }
-
-  function startSlides() {
-    slideshow.style.display = "block";
-    showSlide(current);
-
-    const interval = setInterval(() => {
-      current++;
-      if (current >= slides.length) {
-        clearInterval(interval);
-        slideshow.style.display = "none";
-        document.body.style.background = "black";
-        setTimeout(() => {
-          finalMessage.style.display = "block";
-        }, 2000);
-        return;
-      }
+    function startSlides() {
+      overlay.style.display = 'none';
+      slideshow.style.display = 'block';
       showSlide(current);
-    }, slideDuration);
-  }
+      const interval = setInterval(() => {
+        current++;
+        if (current < slides.length) {
+          showSlide(current);
+        } else {
+          clearInterval(interval);
+          slideshow.style.display = 'none';
+          setTimeout(() => finalMsg.style.display = 'block', lastDelay);
+        }
+      }, slideDuration);
+    }
 
-  function startExperience() {
-    overlay.style.display = "none";
-    introText.style.display = "flex";
-    fullAudio.currentTime = 0;
-    fullAudio.play().catch(() => {});
-    setTimeout(() => {
-      introText.style.display = "none";
-      startSlides();
-    }, 7000);
-  }
-
-  overlay.addEventListener("click", startExperience);
-  overlay.addEventListener("touchstart", startExperience);
-</script>
-
+    overlay.addEventListener('click', () => {
+      audio.muted = false;
+      audio.play().catch(() => {});
+      audio.classList.add('show');
+      setTimeout(startSlides, 7000);
+    });
+    overlay.addEventListener('touchstart', () => overlay.click());
+  </script>
 </body>
 </html>
 
