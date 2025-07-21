@@ -86,35 +86,16 @@
 </div>
 
 <div class="slideshow-container" id="slideshow">
-  <!-- 21 images -->
-  <div class="slide"><img src="images/img1.jpg" /></div>
-  <div class="slide"><img src="images/img2.jpg" /></div>
-  <div class="slide"><img src="images/img3.jpg" /></div>
-  <div class="slide"><img src="images/img4.jpg" /></div>
-  <div class="slide"><img src="images/img5.jpg" /></div>
-  <div class="slide"><img src="images/img6.jpg" /></div>
-  <div class="slide"><img src="images/img7.jpg" /></div>
-  <div class="slide"><img src="images/img8.jpg" /></div>
-  <div class="slide"><img src="images/img9.jpg" /></div>
-  <div class="slide"><img src="images/img10.jpg" /></div>
-  <div class="slide"><img src="images/img11.jpg" /></div>
-  <div class="slide"><img src="images/img12.jpg" /></div>
-  <div class="slide"><img src="images/img13.jpg" /></div>
-  <div class="slide"><img src="images/img14.jpg" /></div>
-  <div class="slide"><img src="images/img15.jpg" /></div>
-  <div class="slide"><img src="images/img16.jpg" /></div>
-  <div class="slide"><img src="images/img17.jpg" /></div>
-  <div class="slide"><img src="images/img18.jpg" /></div>
-  <div class="slide"><img src="images/img19.jpg" /></div>
-  <div class="slide"><img src="images/img20.jpg" /></div>
-  <div class="slide"><img src="images/img21.jpg" /></div>
+  <!-- Replace with your own image filenames in /images/ folder -->
+  ${[...Array(21)].map((_, i) => `<div class="slide"><img src="images/img${i+1}.jpg" /></div>`).join('')}
 </div>
 
 <div class="final-message" id="finalMessage">We support you always. We Love you.</div>
 
-<!-- Audio (no bgMusic) -->
+<!-- ✅ Audio -->
 <audio id="introAudio" src="intro.mp3" preload="auto" playsinline></audio>
-<audio id="instrumentalMusic" src="instrumental.mp3" preload="auto" playsinline></audio>
+<audio id="videoBackAudio" src="video_back.mp3" preload="auto" playsinline></audio>
+<audio id="instrumentalAudio" src="instrumental.mp3" preload="auto" playsinline></audio>
 <audio id="outroAudio" src="outro.mp3" preload="auto" playsinline></audio>
 
 <script>
@@ -122,10 +103,12 @@
   const slideshow = document.getElementById("slideshow");
   const introText = document.getElementById("introText");
   const overlay = document.getElementById("startOverlay");
-  const introAudio = document.getElementById("introAudio");
-  const instrumentalAudio = document.getElementById("instrumentalMusic");
-  const outroAudio = document.getElementById("outroAudio");
   const finalMessage = document.getElementById("finalMessage");
+
+  const introAudio = document.getElementById("introAudio");
+  const videoBackAudio = document.getElementById("videoBackAudio");
+  const instrumentalAudio = document.getElementById("instrumentalAudio");
+  const outroAudio = document.getElementById("outroAudio");
 
   const slideDuration = 6500;
   const lastSlideDuration = 10000;
@@ -141,9 +124,6 @@
     slideshow.style.display = "block";
     showSlide(current);
 
-    // Start instrumental
-    instrumentalAudio.play().catch(() => {});
-
     const interval = setInterval(() => {
       current++;
 
@@ -151,33 +131,27 @@
         clearInterval(interval);
         showSlide(current);
 
-        // Fade last slide out after 8s
+        // Fade out instrumental in the last 5 seconds
         setTimeout(() => {
-          slides[current].style.opacity = 1;
-          const fadeSlide = setInterval(() => {
-            slides[current].style.opacity -= 0.05;
-            if (slides[current].style.opacity <= 0) {
-              slides[current].style.display = "none";
-              clearInterval(fadeSlide);
+          const fadeOut = setInterval(() => {
+            if (instrumentalAudio.volume > 0.05) {
+              instrumentalAudio.volume -= 0.05;
+            } else {
+              instrumentalAudio.pause();
+              clearInterval(fadeOut);
             }
-          }, 200);
-        }, 8000);
+          }, 250);
+        }, lastSlideDuration - 5000);
 
-        // Stop instrumental 1s before outro
-        setTimeout(() => {
-          instrumentalAudio.pause();
-          instrumentalAudio.currentTime = 0;
-        }, lastSlideDuration - 1000);
-
-        // Wait 1s, then play outro + message
         setTimeout(() => {
           document.body.style.background = "black";
-          setTimeout(() => { outroAudio.play().catch(() => {}); }, 1000);
+          setTimeout(() => {
+            outroAudio.play().catch(() => {});
+          }, 1000); // 1–2 sec silence
           setTimeout(() => {
             finalMessage.style.display = "block";
-          }, 2000);
+          }, 3000); // 2 sec after outro starts
         }, lastSlideDuration);
-
         return;
       }
 
@@ -193,7 +167,13 @@
 
     setTimeout(() => {
       introText.style.display = "none";
-      startSlides();
+      videoBackAudio.play().catch(() => {});
+
+      videoBackAudio.onended = () => {
+        instrumentalAudio.volume = 1;
+        instrumentalAudio.play().catch(() => {});
+        startSlides();
+      };
     }, 7000);
   }
 
@@ -203,4 +183,3 @@
 
 </body>
 </html>
-
