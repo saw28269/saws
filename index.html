@@ -100,28 +100,27 @@
 
 <!-- Slideshow -->
 <div class="slideshow-container" id="slideshow">
-  <!-- Replace with your own images -->
-  <div class="slide"><img src="img1.jpg" /></div>
-  <div class="slide"><img src="img2.jpg" /></div>
-  <div class="slide"><img src="img3.jpg" /></div>
-  <div class="slide"><img src="img4.jpg" /></div>
-  <div class="slide"><img src="img5.jpg" /></div>
-  <div class="slide"><img src="img6.jpg" /></div>
-  <div class="slide"><img src="img7.jpg" /></div>
-  <div class="slide"><img src="img8.jpg" /></div>
-  <div class="slide"><img src="img9.jpg" /></div>
-  <div class="slide"><img src="img10.jpg" /></div>
-  <div class="slide"><img src="img11.jpg" /></div>
-  <div class="slide"><img src="img12.jpg" /></div>
-  <div class="slide"><img src="img13.jpg" /></div>
-  <div class="slide"><img src="img14.jpg" /></div>
-  <div class="slide"><img src="img15.jpg" /></div>
-  <div class="slide"><img src="img16.jpg" /></div>
-  <div class="slide"><img src="img17.jpg" /></div>
-  <div class="slide"><img src="img18.jpg" /></div>
-  <div class="slide"><img src="img19.jpg" /></div>
-  <div class="slide"><img src="img20.jpg" /></div>
-  <div class="slide"><img src="img21.jpg" /></div>
+  <div class="slide"><img src="images/img1.jpg" /></div>
+  <div class="slide"><img src="images/img2.jpg" /></div>
+  <div class="slide"><img src="images/img3.jpg" /></div>
+  <div class="slide"><img src="images/img4.jpg" /></div>
+  <div class="slide"><img src="images/img5.jpg" /></div>
+  <div class="slide"><img src="images/img6.jpg" /></div>
+  <div class="slide"><img src="images/img7.jpg" /></div>
+  <div class="slide"><img src="images/img8.jpg" /></div>
+  <div class="slide"><img src="images/img9.jpg" /></div>
+  <div class="slide"><img src="images/img10.jpg" /></div>
+  <div class="slide"><img src="images/img11.jpg" /></div>
+  <div class="slide"><img src="images/img12.jpg" /></div>
+  <div class="slide"><img src="images/img13.jpg" /></div>
+  <div class="slide"><img src="images/img14.jpg" /></div>
+  <div class="slide"><img src="images/img15.jpg" /></div>
+  <div class="slide"><img src="images/img16.jpg" /></div>
+  <div class="slide"><img src="images/img17.jpg" /></div>
+  <div class="slide"><img src="images/img18.jpg" /></div>
+  <div class="slide"><img src="images/img19.jpg" /></div>
+  <div class="slide"><img src="images/img20.jpg" /></div>
+  <div class="slide"><img src="images/img21.jpg" /></div>
 </div>
 
 <!-- Outro Message -->
@@ -140,6 +139,7 @@
   const overlay = document.getElementById("startOverlay");
   const music = document.getElementById("bgMusic");
   const introAudio = document.getElementById("introAudio");
+  const instrumentalAudio = document.getElementById("instrumentalMusic");
   const outroAudio = document.getElementById("outroAudio");
   const finalMessage = document.getElementById("finalMessage");
 
@@ -156,6 +156,11 @@
   function startSlides() {
     slideshow.style.display = "block";
     showSlide(current);
+
+    // Play instrumental music after intro
+    setTimeout(() => {
+      instrumentalAudio.play().catch(() => {});
+    }, 3000);
 
     const interval = setInterval(() => {
       current++;
@@ -177,7 +182,7 @@
 
         setTimeout(() => {
           document.body.style.background = "black";
-          setTimeout(() => { document.getElementById('outroAudio').play().catch(() => {}); }, 1000);
+          setTimeout(() => { outroAudio.play().catch(() => {}); }, 1000);
           setTimeout(() => {
             finalMessage.style.display = "block";
           }, 2000);
@@ -193,13 +198,11 @@
     overlay.style.display = "none";
     introText.style.display = "flex";
 
-    // Safely play intro audio
     introAudio.play().catch(() => {});
 
     setTimeout(() => {
       introText.style.display = "none";
 
-      // Play background music after intro
       music.play().catch(() => {
         alert("Please tap again to enable music playback.");
       });
@@ -208,7 +211,6 @@
     }, 7000);
   }
 
-  // Trigger everything after first user interaction
   overlay.addEventListener("click", startExperience);
   overlay.addEventListener("touchstart", startExperience);
 </script>
