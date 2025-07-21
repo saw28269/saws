@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Kayla Tribute</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: 'Arial', sans-serif;
+      font-family: Arial, sans-serif;
       background: black;
       color: white;
       overflow: hidden;
@@ -61,7 +61,6 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      background: black;
     }
     .final-message {
       display: none;
@@ -83,7 +82,9 @@
   <p>You're loved</p>
   <div class="support">We Support You Always</div>
 </div>
+
 <div class="slideshow-container" id="slideshow">
+  <!-- Replace with your own images -->
   <div class="slide"><img src="images/img1.jpg" /></div>
   <div class="slide"><img src="images/img2.jpg" /></div>
   <div class="slide"><img src="images/img3.jpg" /></div>
@@ -106,23 +107,19 @@
   <div class="slide"><img src="images/img20.jpg" /></div>
   <div class="slide"><img src="images/img21.jpg" /></div>
 </div>
+
 <div class="final-message" id="finalMessage">We support you always. We Love you.</div>
 
-<audio id="introAudio" src="intro.mp3" preload="auto" playsinline></audio>
-<audio id="videoBackAudio" src="video_back.mp3" preload="auto" playsinline></audio>
-<audio id="instrumentalAudio" src="instrumental.mp3" preload="auto" playsinline></audio>
-<audio id="outroAudio" src="outro.mp3" preload="auto" playsinline></audio>
+<!-- Single Audio File -->
+<audio id="combinedAudio" src="combined_audio.mp3" preload="auto" playsinline></audio>
 
 <script>
   const slides = document.querySelectorAll(".slide");
   const slideshow = document.getElementById("slideshow");
-  const introText = document.getElementById("introText");
   const overlay = document.getElementById("startOverlay");
+  const introText = document.getElementById("introText");
   const finalMessage = document.getElementById("finalMessage");
-  const introAudio = document.getElementById("introAudio");
-  const videoBackAudio = document.getElementById("videoBackAudio");
-  const instrumentalAudio = document.getElementById("instrumentalAudio");
-  const outroAudio = document.getElementById("outroAudio");
+  const audio = document.getElementById("combinedAudio");
 
   const slideDuration = 6500;
   const lastSlideDuration = 10000;
@@ -142,27 +139,9 @@
       if (current === slides.length - 1) {
         clearInterval(interval);
         showSlide(current);
-
         setTimeout(() => {
-          const fadeOut = setInterval(() => {
-            if (instrumentalAudio.volume > 0.05) {
-              instrumentalAudio.volume -= 0.05;
-            } else {
-              instrumentalAudio.pause();
-              clearInterval(fadeOut);
-            }
-          }, 250);
-        }, lastSlideDuration - 5000);
-
-        setTimeout(() => {
-          document.body.style.background = "black";
-          setTimeout(() => {
-            outroAudio.play().catch(() => {});
-          }, 2000);
-          setTimeout(() => {
-            finalMessage.style.display = "block";
-          }, 4000);
-        }, lastSlideDuration);
+          finalMessage.style.display = "block";
+        }, lastSlideDuration + 2000); // Delay for outro message
         return;
       }
       showSlide(current);
@@ -172,15 +151,11 @@
   function startExperience() {
     overlay.style.display = "none";
     introText.style.display = "flex";
-    introAudio.play().catch(() => {});
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
     setTimeout(() => {
       introText.style.display = "none";
-      videoBackAudio.play().catch(() => {});
-      videoBackAudio.onended = () => {
-        instrumentalAudio.volume = 1;
-        instrumentalAudio.play().catch(() => {});
-        startSlides();
-      };
+      startSlides();
     }, 7000);
   }
 
@@ -190,3 +165,4 @@
 
 </body>
 </html>
+
